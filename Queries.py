@@ -1,15 +1,53 @@
 import psycopg
 
-
-
 def getAllStudents():
     with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
         with db.cursor() as cursor:        
             cursor.execute("SELECT * FROM STUDENTS ORDER BY student_id ASC")
             result = cursor.fetchall()
 
-        for row in result:
-            print(row)
+        if result:
+            print("\nList of Students:")
+            print("{:<10} {:<15} {:<15} {:<30} {:<15}".format("Student ID", "First Name", "Last Name", "Email", "Enrollment Date"))
+            print("-" * 90)
+            for row in result:
+                student_id, first_name, last_name, email, enrollment_date = row
+                enrollment_date_string = enrollment_date.strftime("%Y-%m-%d") if enrollment_date else ""
+                print("{:<10} {:<15} {:<15} {:<30} {:<15}".format(student_id, first_name, last_name, email, enrollment_date_string))
+        else:
+            print("No students found.")
 
+def addStudent(first_name, last_name, email, enrollment_date): 
+     with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
+        with db.cursor() as cursor:       
+            cursor.execute("INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s)", (first_name, last_name, email, enrollment_date,))
 
-getAllStudents()
+if __name__ == '__main__':
+
+    while True:
+        print("\nOptions:")
+        print("1. View all students")
+        print("2. Add a new student")
+        print("3. Update a student's email")
+        print("4. Delete a student")
+        print("5. Exit")
+        
+        option = int(input("\nWhich function do you want to run? "))
+
+        match option:
+            case 1:
+                getAllStudents()
+
+            case 2:
+                first_name = input("\nEnter the first name of the student: ")
+                last_name = input("Enter the last name of the student: ")
+                email = input("Enter the email of the student: ")
+                enrollment_date = input("Enter the enrollment date of the student: ")
+
+                addStudent(first_name, last_name, email, enrollment_date)
+            
+            case 3:
+                print("Thank you for using this Application! ")
+                break
+    
+
