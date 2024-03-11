@@ -18,9 +18,21 @@ def getAllStudents():
             print("No students found.")
 
 def addStudent(first_name, last_name, email, enrollment_date): 
-     with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
+    with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
         with db.cursor() as cursor:       
             cursor.execute("INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s)", (first_name, last_name, email, enrollment_date,))
+
+
+def updateStudentEmail(student_id, new_email):
+    with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
+        with db.cursor() as cursor:  
+            cursor.execute("UPDATE students SET email = %s WHERE students.student_id = %s", (new_email, student_id))    
+
+def deleteStudent(student_id):
+    with psycopg.connect("dbname=3005Assignment3Q1 user=postgres password=student") as db:
+        with db.cursor() as cursor:  
+            cursor.execute("DELETE FROM students WHERE student_id = %s", (student_id,))
+
 
 if __name__ == '__main__':
 
@@ -45,9 +57,16 @@ if __name__ == '__main__':
                 enrollment_date = input("Enter the enrollment date of the student: ")
 
                 addStudent(first_name, last_name, email, enrollment_date)
+
             
             case 3:
-                print("Thank you for using this Application! ")
-                break
-    
+                student_id = input("\nEnter the student ID: ")
+                email = input("Enter the new email: ")
+                updateStudentEmail(student_id, email)
 
+            case 4: 
+                idToDelete = input("\nEnter the student ID to delete: ")
+                deleteStudent(idToDelete)
+
+            case 5: 
+                break;
