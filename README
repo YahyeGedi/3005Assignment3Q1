@@ -4,7 +4,7 @@ Youtube Link: https://youtu.be/KJmt2TBI0Ts
 
 
 Steps to use this application:
-1. Make sure you have pip and pgAdmin4 downloaded.
+1. Make sure you have pip and pgAdmin4 installed.
 
 2. Make sure you have installed psycopg using this command:
     pip install "psycopg[binary]"
